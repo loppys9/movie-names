@@ -17,7 +17,7 @@ def _get_best_device():
 
 def _train(model, dataloader, loss_fn, optimizer):
 
-    # model.train()
+    model.train()
     for batch, (x, y) in enumerate(dataloader):
         y_hat = model(x)
         loss = loss_fn(y_hat, y[:, :NO])
@@ -26,12 +26,7 @@ def _train(model, dataloader, loss_fn, optimizer):
         loss.backward()
         optimizer.step()
 
-        if (batch+1) % 500 == 0:
-            print(f"loss: {loss.item():>7f}  [{batch}]")
-            # print('guess', y_hat[0][0])
-            # print('actual', y[0][0])
-            # print("diff:", y_hat[0][0] - y[0][0])
-            # print("x:", x[0][0])
+    print(f"loss: {loss.item():>7f}  [{batch}]")
 
 def _to_chars(vals):
     s = ''
@@ -95,7 +90,6 @@ def train():
     test_dataloader = DataLoader(testing_dataset, batch_size=batch_size, shuffle=False)
 
     model = MovieNameNetwork().to(device)
-    # loss_fn = nn.CrossEntropyLoss()
     #loss_fn = nn.MSELoss()
     loss_fn = nn.L1Loss()
     learning_rate = 0.001
@@ -104,9 +98,9 @@ def train():
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
     scheduler = StepLR(optimizer, step_size=100, gamma=0.8)
 
-    epochs = 500
+    epochs = 50
     for i in tqdm(range(epochs)):
         _train(model, train_dataloader, loss_fn, optimizer)
-        if i == 499:
+        if i == 49:
             _test(model, test_dataloader, loss_fn)
         scheduler.step()

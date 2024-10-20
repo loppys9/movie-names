@@ -221,9 +221,49 @@ def remove_long_names(have, want):
     return have, want
 
 
+def _data_augmentation(have, want):
+    opts = set()
+
+    for h in have:
+        vals = h.split(".")
+        b = h.split()
+        if len(b) > len(vals):
+            vals = b
+        for val in reversed(vals[:-1]):
+            if val.isnumeric():
+                break
+            opts.add(val)
+
+    delims = [".", ".",  " "]
+    list_opts = list(opts)
+    more_have = []
+    more_want = []
+    multiplier = 4
+    for _ in range(multiplier):
+        for w in want:
+            delim = random.choice(delims)
+            a = w.split(".")[0]
+            name = w.split(".")[0].replace("(", "").replace(")", "").replace(" ", delim)
+            extras = random.randint(3, 8)
+            for _ in range(extras):
+                name += delim + random.choice(list_opts)
+
+            ext = random.choice(EXTS)
+            name += ext
+            if len(name) < 257:
+                more_have.append(name)
+                more_want.append(a+ext)
+
+    have += more_have
+    want += more_want
+
+
 def split_data(filename):
     have, want = read_data(filename)
     have, want = remove_long_names(have, want)
+    print(len(have), len(want))
+    _data_augmentation(have, want)
+    print(len(have), len(want))
 
     test_split = 0.2
 

@@ -15,8 +15,8 @@ class MovieNameNetwork(nn.Module):
             nn.Linear(128, 96),
             nn.ReLU(),
             nn.Linear(96, 96),
-            nn.ReLU(),
-            nn.Linear(96, 96),
+            #nn.ReLU(),
+            #nn.Linear(96, 96),
             nn.Sigmoid(),
             # nn.Softmax(),
         )
