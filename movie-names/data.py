@@ -10,7 +10,7 @@ from tqdm import tqdm
 log = logging.getLogger(__name__)
 
 LABLE_LENGTH = 96
-#EXTS = [".mkv", ".mp4", ".divx", ".iso"]
+# EXTS = [".mkv", ".mp4", ".divx", ".iso"]
 EXTS = [".mkv"]
 
 
@@ -93,7 +93,35 @@ def get_movie_list(api_key) -> tuple:
 
 
 def _search_terms(api_key, mapping):
-    terms = ["w", "west", "wedding", "war", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "u", "v", "x", "y", "z"]
+    terms = [
+        "w",
+        "west",
+        "wedding",
+        "war",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+        "m",
+        "n",
+        "o",
+        "p",
+        "q",
+        "r",
+        "s",
+        "u",
+        "v",
+        "x",
+        "y",
+        "z",
+    ]
 
     for term in terms:
         data = _get_data(api_key, 0, query=term)
@@ -207,9 +235,9 @@ def remove_long_names(have, want):
             bad_ind.append(ind)
         if len(w) > LABLE_LENGTH:
             bad_ind.append(ind)
-        if ':' in w:
-            want[ind] = w.replace(':', "")
-                #bad_ind.append(ind)
+        if ":" in w:
+            want[ind] = w.replace(":", "")
+            # bad_ind.append(ind)
         if "'" in w:
             want[ind] = w.replace("'", "")
         if "!" in w:
@@ -234,7 +262,7 @@ def _data_augmentation(have, want):
                 break
             opts.add(val)
 
-    delims = [".", ".",  " "]
+    delims = [".", ".", " "]
     list_opts = list(opts)
     more_have = []
     more_want = []
@@ -252,7 +280,7 @@ def _data_augmentation(have, want):
             name += ext
             if len(name) < 257:
                 more_have.append(name)
-                more_want.append(a+ext)
+                more_want.append(a + ext)
 
     have += more_have
     want += more_want
