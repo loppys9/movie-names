@@ -88,21 +88,21 @@ def train():
     training_dataset = MovieNameDataset("data/train_movie_names", device)
     testing_dataset = MovieNameDataset("data/test_movie_names", device)
 
-    train_dataloader = DataLoader(training_dataset, batch_size=batch_size, shuffle=False)
+    train_dataloader = DataLoader(training_dataset, batch_size=batch_size, shuffle=True)
     test_dataloader = DataLoader(testing_dataset, batch_size=batch_size, shuffle=False)
 
     model = MovieNameNetwork().to(device)
     # loss_fn = nn.MSELoss()
     loss_fn = nn.L1Loss()
-    learning_rate = 0.001
-    # optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-7)
+    learning_rate = 0.02
+    #optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-6)
     # optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-    scheduler = StepLR(optimizer, step_size=10, gamma=0.7)
+    scheduler = StepLR(optimizer, step_size=2, gamma=0.7)
 
-    epochs = 100
+    epochs = 50
     for i in tqdm(range(epochs)):
         _train(model, train_dataloader, loss_fn, optimizer)
-        if i == 99:
+        if i == 49:
             _test(model, test_dataloader, loss_fn)
         scheduler.step()
